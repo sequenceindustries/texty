@@ -1,0 +1,133 @@
+---
+import TextEditor from '../TextEditor.astro';
+import TextStats from '../TextStats.astro';
+import { CHAR_LIMITS, LIMITS_REVIEWED } from '../../data/limits';
+---
+
+<div class="cc" data-cc>
+  <TextEditor id="cc-text" label="Your text" rows={8} stats={false} />
+  <TextStats
+    label="Character counts"
+    primary={2}
+    items={[
+      { key: 'characters', label: 'Characters' },
+      { key: 'charactersNoSpaces', label: 'Without spaces' },
+      { key: 'letters', label: 'Letters' },
+      { key: 'numbers', label: 'Numbers' },
+      { key: 'punctuation', label: 'Punctuation' },
+      { key: 'spaces', label: 'Spaces and line breaks' },
+      { key: 'symbols', label: 'Symbols and emoji' },
+      { key: 'lines', label: 'Lines' },
+    ]}
+  />
+  <section class="limits" aria-labelledby="limits-h">
+    <h2 id="limits-h">Common limits</h2>
+    <ul>
+      <li data-sms>
+        <div class="row">
+          <span class="name">SMS text message</span>
+          <span class="status" data-status>Empty</span>
+        </div>
+        <div class="meter" aria-hidden="true"><span data-bar></span></div>
+        <p class="note" data-note>160 characters per message, or 70 if it contains emoji or other special characters.</p>
+      </li>
+      {
+        CHAR_LIMITS.map((l) => (
+          <li data-limit={l.id} data-max={l.max}>
+            <div class="row">
+              <span class="name">
+                {l.name}
+                {l.kind === 'guideline' && <span class="kind"> (guideline)</span>}
+              </span>
+              <span class="status" data-status>
+                0 / {l.max.toLocaleString('en')}
+              </span>
+            </div>
+            <div class="meter" aria-hidden="true">
+              <span data-bar />
+            </div>
+            {l.note && <p class="note">{l.note}</p>}
+          </li>
+        ))
+      }
+    </ul>
+    <p class="reviewed">Platform limits last checked {LIMITS_REVIEWED}. Platforms change them from time to time.</p>
+  </section>
+</div>
+
+<script>
+  import '../../scripts/tools/character-counter';
+</script>
+
+<style>
+  .cc {
+    display: grid;
+    gap: var(--s-5);
+  }
+  .limits {
+    display: grid;
+    gap: var(--s-3);
+  }
+  .limits h2 {
+    font-size: var(--step-2);
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--s-1);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+  }
+  li {
+    display: grid;
+    gap: var(--s-2);
+    padding: var(--s-3) var(--s-4);
+    border-radius: var(--r-paper);
+    background: var(--surface);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+  .row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s-3);
+    align-items: baseline;
+  }
+  .name {
+    font-weight: 650;
+  }
+  .kind {
+    font-weight: 500;
+    color: var(--ink-faint);
+  }
+  .status {
+    font-size: var(--step--1);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  li:global(.is-over) .status {
+    color: var(--del);
+  }
+  .meter {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--rule);
+    overflow: hidden;
+  }
+  .meter span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--add);
+    border-radius: 3px;
+  }
+  li:global(.is-over) .meter span {
+    background: var(--del);
+  }
+  .note,
+  .reviewed {
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
+  }
+</style>

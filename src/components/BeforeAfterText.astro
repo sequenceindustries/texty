@@ -1,0 +1,56 @@
+---
+/** Original | Result, side by side on wide screens. The result side carries the actions. */
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+---
+
+<div class="ba" data-before-after={id}>
+  <section class="pane" aria-labelledby={`${id}-orig-h`}>
+    <h2 id={`${id}-orig-h`} class="pane-h">Original</h2>
+    <div class="pane-body" data-ba="original" tabindex="0" aria-label="Original text"></div>
+  </section>
+  <section class="pane pane--result" aria-labelledby={`${id}-res-h`}>
+    <slot />
+  </section>
+</div>
+
+<style>
+  .ba {
+    display: grid;
+    gap: var(--s-5);
+    grid-template-columns: minmax(0, 1fr);
+  }
+  @media (min-width: 860px) {
+    .ba {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+  .pane {
+    display: grid;
+    gap: var(--s-3);
+    align-content: start;
+    min-width: 0;
+  }
+  .pane-h {
+    font: 700 var(--step--1) / 1.3 var(--font);
+    font-variation-settings: 'CASL' 0;
+    color: var(--ink-soft);
+    min-height: 44px;
+    display: flex;
+    align-items: flex-end;
+  }
+  .pane-body {
+    max-height: 32rem;
+    overflow: auto;
+    padding: var(--s-4) var(--s-5);
+    border-radius: var(--r-paper);
+    background: var(--surface-2);
+    box-shadow: inset 0 0 0 1px var(--line);
+    color: var(--ink-soft);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    line-height: 1.65;
+  }
+</style>

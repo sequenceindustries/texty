@@ -1,0 +1,103 @@
+---
+import TextEditor from '../TextEditor.astro';
+import AIActionSelector from '../AIActionSelector.astro';
+import ProcessingState from '../ProcessingState.astro';
+import BeforeAfterText from '../BeforeAfterText.astro';
+import CopyButton from '../CopyButton.astro';
+import Icon from '../Icon.astro';
+import { AI_LIMITS } from '../../../shared/ai';
+---
+
+<div class="ai" data-ai>
+  <p class="notice" data-ai-unavailable role="status" hidden>AI rewriting is temporarily unavailable. Our other tools still work as normal.</p>
+  <TextEditor id="ai-text" label="Text to rewrite" rows={9} max={AI_LIMITS.maxInputChars} />
+  <AIActionSelector />
+  <label class="field instruction">
+    <span>Your own instruction (optional)</span>
+    <input class="input" type="text" name="instruction" maxlength={AI_LIMITS.maxInstructionChars} placeholder="Make this sound more confident" autocomplete="off" />
+  </label>
+  <div class="go">
+    <button type="button" class="btn btn--primary" data-act="rewrite"><Icon name="pen" /><span data-label>Rewrite</span></button>
+    <ProcessingState id="ai" label="Rewriting…" />
+    <p class="quota" data-quota></p>
+  </div>
+  <p class="privacy">
+    To rewrite your text, we send it to our AI provider. We don’t store your text or the result. <a href="/privacy">Privacy</a>
+  </p>
+  <p class="notice notice--error" data-ai-error role="alert" hidden></p>
+  <div data-ai-output hidden>
+    <BeforeAfterText id="ai-ba">
+      <div class="res-head">
+        <h2 id="ai-ba-res-h" class="res-h">Result</h2>
+        <div class="res-actions">
+          <button type="button" class="btn" data-act="again"><Icon name="swap" /><span>Rewrite again</span></button>
+          <CopyButton primary />
+        </div>
+      </div>
+      <div class="res-body" data-ba="result" tabindex="0" aria-labelledby="ai-ba-res-h"></div>
+      <button type="button" class="btn btn--quiet btn--small use" data-act="use">Use result as new text</button>
+    </BeforeAfterText>
+    <p class="caution">AI can make mistakes. Read the result before you use it.</p>
+  </div>
+</div>
+
+<script>
+  import '../../scripts/tools/ai-rewriter';
+</script>
+
+<style>
+  .ai {
+    display: grid;
+    gap: var(--s-5);
+  }
+  .instruction {
+    max-width: 40rem;
+  }
+  .go {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-2) var(--s-4);
+  }
+  .quota,
+  .privacy,
+  .caution {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+  .privacy {
+    margin-top: calc(-1 * var(--s-3));
+  }
+  .res-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--s-2);
+    min-height: 44px;
+  }
+  .res-h {
+    font: 700 var(--step--1) / 1.3 var(--font);
+    font-variation-settings: 'CASL' 0;
+    color: var(--ink-soft);
+  }
+  .res-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+  }
+  .res-body {
+    max-height: 32rem;
+    overflow: auto;
+    padding: var(--s-4) var(--s-5);
+    border-radius: var(--r-paper);
+    background: var(--surface);
+    box-shadow: var(--shadow-paper), inset 0 0 0 2px var(--act);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    line-height: 1.65;
+  }
+  .use {
+    justify-self: start;
+  }
+</style>

@@ -1,0 +1,66 @@
+---
+import TextEditor from '../TextEditor.astro';
+import ResultPanel from '../ResultPanel.astro';
+import { REPEAT_MAX_COUNT } from '../../../shared/text/generate';
+---
+
+<TextEditor id="rep-text" label="Text to repeat" placeholder="Hello" rows={3} stats={false} />
+<div class="opts" data-rep-opts>
+  <label class="field count">
+    <span>Repeat</span>
+    <input class="input" type="number" name="count" value="10" min="1" max={REPEAT_MAX_COUNT} step="1" inputmode="numeric" aria-describedby="rep-size" />
+  </label>
+  <fieldset class="seg">
+    <legend class="legend">Separate with</legend>
+    <label><input type="radio" name="sep" value="newline" checked /><span>New line</span></label>
+    <label><input type="radio" name="sep" value="space" /><span>Space</span></label>
+    <label><input type="radio" name="sep" value="comma" /><span>Comma</span></label>
+    <label><input type="radio" name="sep" value="none" /><span>Nothing</span></label>
+    <label><input type="radio" name="sep" value="custom" /><span>Custom</span></label>
+  </fieldset>
+  <label class="field custom" data-custom hidden>
+    <span>Custom separator</span>
+    <input class="input" type="text" name="custom" maxlength="100" value=" | " spellcheck="false" />
+  </label>
+</div>
+<div class="go">
+  <button type="button" class="btn btn--primary" data-act="repeat" disabled>Repeat text</button>
+  <p id="rep-size" class="size" data-rep-size role="status"></p>
+</div>
+<ResultPanel id="rep-result" label="Repeated text" filename="texty-repeated.txt" rows={10} />
+
+<script>
+  import '../../scripts/tools/repeater';
+</script>
+
+<style>
+  .opts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--s-4) var(--s-5);
+  }
+  .count {
+    width: 9rem;
+  }
+  .custom {
+    width: 12rem;
+  }
+  .go {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-2) var(--s-4);
+  }
+  .size {
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+  .size:global(.is-warn) {
+    color: var(--warn);
+  }
+  .size:global(.is-error) {
+    color: var(--del);
+  }
+</style>

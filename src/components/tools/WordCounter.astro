@@ -1,0 +1,106 @@
+---
+import TextEditor from '../TextEditor.astro';
+import TextStats from '../TextStats.astro';
+/** Flagship. Used on /word-counter and as the homepage hero. */
+interface Props {
+  autofocus?: boolean;
+}
+---
+
+<div class="wc" data-wc>
+  <TextEditor id="wc-text" label="Your text" rows={11} stats={false} />
+  <TextStats
+    label="Text statistics"
+    primary={2}
+    items={[
+      { key: 'words', label: 'Words' },
+      { key: 'characters', label: 'Characters' },
+      { key: 'charactersNoSpaces', label: 'Characters without spaces' },
+      { key: 'sentences', label: 'Sentences' },
+      { key: 'paragraphs', label: 'Paragraphs' },
+      { key: 'lines', label: 'Lines' },
+      { key: 'readingTime', label: 'Reading time', initial: '0 min' },
+      { key: 'speakingTime', label: 'Speaking time', initial: '0 min' },
+    ]}
+  />
+  <details class="freq" data-freq>
+    <summary>Most used words</summary>
+    <div class="freq-body">
+      <label class="check"><input type="checkbox" data-skip-common checked /> Hide common words (the, and, of…)</label>
+      <p class="empty" data-freq-empty>Add some text to see which words you use most.</p>
+      <table data-freq-table hidden>
+        <caption class="visually-hidden">Most used words</caption>
+        <thead><tr><th scope="col">Word</th><th scope="col" class="r">Count</th><th scope="col" class="r">Share</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </details>
+</div>
+
+<script>
+  import '../../scripts/tools/word-counter';
+</script>
+
+<style>
+  .wc {
+    display: grid;
+    gap: var(--s-4);
+  }
+  .freq {
+    border-radius: var(--r-paper);
+    background: var(--surface);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+  .freq summary {
+    display: flex;
+    align-items: center;
+    min-height: 52px;
+    padding: 0 var(--s-5);
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .freq summary::after {
+    content: '+';
+    margin-left: auto;
+    font-size: 1.4rem;
+    color: var(--act);
+  }
+  .freq[open] summary::after {
+    content: '−';
+  }
+  .freq-body {
+    display: grid;
+    gap: var(--s-3);
+    padding: 0 var(--s-5) var(--s-5);
+  }
+  .empty {
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+  }
+  table {
+    width: 100%;
+    max-width: 32rem;
+    border-collapse: collapse;
+    font-size: var(--step--1);
+  }
+  table :global(th),
+  table :global(td) {
+    padding: 6px var(--s-2);
+    border-bottom: 1px solid var(--rule);
+    text-align: left;
+  }
+  table :global(th) {
+    color: var(--ink-faint);
+    font-weight: 650;
+  }
+  table :global(.r) {
+    text-align: right;
+  }
+  table :global(.bar) {
+    display: block;
+    height: 6px;
+    margin-top: 4px;
+    border-radius: 3px;
+    background: var(--mark);
+  }
+</style>

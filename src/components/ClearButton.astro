@@ -1,0 +1,7 @@
+---
+import Icon from './Icon.astro';
+/** Clear with a short-lived Undo in its place. */
+---
+
+<button type="button" class="btn btn--quiet btn--small" data-act="clear" disabled><Icon name="clear" /><span>Clear</span></button>
+<button type="button" class="btn btn--quiet btn--small undo" data-act="undo" hidden><Icon name="undo" /><span>Undo</span></button>

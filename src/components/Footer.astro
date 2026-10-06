@@ -1,0 +1,95 @@
+---
+import Logo from './Logo.astro';
+import { GROUPS, byGroup } from '../data/tools';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap grid">
+    <div class="about">
+      <a class="brand" href="/" aria-label="Texty home"><Logo size={22} /></a>
+      <p>Text tools that just work. Free, no account, and every tool except the AI rewriter runs entirely in your browser.</p>
+    </div>
+    {
+      GROUPS.map((g) => (
+        <nav aria-label={g.name}>
+          <h2 class="h">{g.name}</h2>
+          <ul>
+            {byGroup(g.id).map((t) => (
+              <li>
+                <a href={`/${t.slug}`}>{t.name}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ))
+    }
+    <nav aria-label="Texty">
+      <h2 class="h">Texty</h2>
+      <ul>
+        <li><a href="/about">About</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="wrap legal">
+    <p>© {year} Sequence Industries</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--s-9);
+    padding-block: var(--s-7) var(--s-6);
+    border-top: 1px solid var(--line);
+    background: var(--surface-2);
+  }
+  .grid {
+    display: grid;
+    gap: var(--s-6);
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 760px) {
+    .grid {
+      grid-template-columns: 1.4fr 1fr 1fr 0.8fr 0.6fr;
+    }
+  }
+  .brand {
+    display: inline-flex;
+    color: var(--ink);
+    text-decoration: none;
+    margin-bottom: var(--s-3);
+  }
+  .about p {
+    max-width: 36ch;
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+  }
+  .h {
+    font: 700 var(--step--1) / 1.2 var(--font);
+    font-variation-settings: 'CASL' 0;
+    color: var(--ink-faint);
+    margin-bottom: var(--s-2);
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  li a {
+    display: inline-block;
+    padding-block: 5px;
+    color: var(--ink);
+    text-decoration: none;
+    font-size: var(--step--1);
+  }
+  li a:hover {
+    color: var(--act);
+    text-decoration: underline;
+  }
+  .legal {
+    margin-top: var(--s-6);
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+  }
+</style>

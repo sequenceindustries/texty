@@ -1,0 +1,35 @@
+{
+  "name": "texty",
+  "version": "0.1.0",
+  "description": "Texty — text tools that just work.",
+  "scripts": {
+    "dev": "astro dev",
+    "dev:api": "tsx watch server/index.ts",
+    "build": "astro build && tsc -p tsconfig.server.json",
+    "start": "node build/server/index.js",
+    "test": "vitest run",
+    "check": "astro check && tsc -p tsconfig.server.json --noEmit",
+    "test:e2e": "python3 test/e2e/run.py"
+  },
+  "dependencies": {
+    "@fastify/compress": "^9.2.0",
+    "@fastify/rate-limit": "^11.2.0",
+    "@fastify/static": "^10.1.5",
+    "@fontsource-variable/recursive": "^5.3.0",
+    "astro": "^5.18.2",
+    "fastify": "^5.12.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@types/node": "^26.6.4",
+    "axe-core": "^4.13.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.3"
+  },
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  }
+}

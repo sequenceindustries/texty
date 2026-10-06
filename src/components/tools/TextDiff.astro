@@ -1,0 +1,160 @@
+---
+import DualTextEditor from '../DualTextEditor.astro';
+import ResultPanel from '../ResultPanel.astro';
+import ProcessingState from '../ProcessingState.astro';
+---
+
+<DualTextEditor a={{ id: 'diff-a', label: 'Original', placeholder: 'Paste the original text…' }} b={{ id: 'diff-b', label: 'Changed', placeholder: 'Paste the changed text…' }} />
+<div class="go" data-diff-controls>
+  <button type="button" class="btn btn--primary" data-act="compare">Compare</button>
+  <label class="check"><input type="checkbox" name="ignoreWhitespace" /> Ignore spacing</label>
+  <label class="check"><input type="checkbox" name="ignoreCase" /> Ignore case</label>
+  <ProcessingState id="diff" label="Comparing…" />
+</div>
+<p class="notice notice--error" data-diff-error role="alert" hidden></p>
+<ResultPanel id="diff-result" label="Differences" filename="texty-comparison.txt" textarea={false} copyLabel="Copy comparison">
+  <div class="legend-row" data-diff-legend hidden>
+    <span class="key key--add"><b aria-hidden="true">+</b> Added</span>
+    <span class="key key--del"><b aria-hidden="true">−</b> Removed</span>
+    <span class="key key--chg"><b aria-hidden="true">~</b> Changed</span>
+  </div>
+  <div class="diff" data-diff-view>
+    <p class="placeholder">Paste two versions above and select Compare.</p>
+  </div>
+</ResultPanel>
+
+<script>
+  import '../../scripts/tools/text-diff';
+</script>
+
+<style>
+  .go {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-2) var(--s-5);
+  }
+  .legend-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-4);
+    font-size: var(--step--1);
+    font-weight: 600;
+  }
+  .key b {
+    display: inline-grid;
+    place-items: center;
+    width: 1.4em;
+    height: 1.4em;
+    margin-right: 4px;
+    border-radius: 4px;
+  }
+  .key--add b {
+    background: var(--add-wash);
+    color: var(--add);
+  }
+  .key--del b {
+    background: var(--del-wash);
+    color: var(--del);
+  }
+  .key--chg b {
+    background: var(--chg-wash);
+    color: var(--warn);
+  }
+  .diff {
+    border-radius: var(--r-paper);
+    background: var(--surface);
+    box-shadow: inset 0 0 0 1px var(--line);
+    overflow: hidden;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+  .placeholder {
+    padding: var(--s-5);
+    font-family: var(--font);
+    color: var(--ink-faint);
+  }
+  .diff :global(.r) {
+    display: grid;
+    grid-template-columns: 1.75rem 3.25rem 3.25rem minmax(0, 1fr);
+    border-bottom: 1px solid var(--rule);
+  }
+  .diff :global(.r > span) {
+    padding: 2px 6px;
+  }
+  .diff :global(.mk) {
+    text-align: center;
+    font-weight: 800;
+  }
+  .diff :global(.ln) {
+    text-align: right;
+    color: var(--ink-faint);
+    user-select: none;
+    font-variant-numeric: tabular-nums;
+  }
+  .diff :global(.tx) {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .diff :global(.r--add) {
+    background: var(--add-wash);
+  }
+  .diff :global(.r--add .mk) {
+    color: var(--add);
+  }
+  .diff :global(.r--del) {
+    background: var(--del-wash);
+  }
+  .diff :global(.r--del .mk) {
+    color: var(--del);
+  }
+  .diff :global(.r--chg) {
+    background: var(--chg-wash);
+  }
+  .diff :global(.r--chg .mk) {
+    color: var(--warn);
+  }
+  .diff :global(.r--chg .tx > span) {
+    display: block;
+  }
+  .diff :global(del) {
+    background: var(--del-wash);
+    color: var(--del);
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+  }
+  .diff :global(ins) {
+    background: var(--add-wash);
+    color: var(--add);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+  }
+  .diff :global(.fold) {
+    display: block;
+    width: 100%;
+    min-height: 40px;
+    border: 0;
+    border-bottom: 1px solid var(--rule);
+    background: var(--surface-2);
+    color: var(--act);
+    font: 600 var(--step--1) / 1 var(--font);
+    cursor: pointer;
+  }
+  .diff :global(.fold:hover) {
+    text-decoration: underline;
+  }
+  .diff :global(.more) {
+    padding: var(--s-3) var(--s-4);
+    font-family: var(--font);
+    color: var(--ink-soft);
+  }
+  @media (max-width: 560px) {
+    .diff :global(.r) {
+      grid-template-columns: 1.5rem 2.5rem minmax(0, 1fr);
+    }
+    .diff :global(.ln--a) {
+      display: none;
+    }
+  }
+</style>

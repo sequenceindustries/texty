@@ -1,0 +1,23 @@
+---
+/** Small stroke icons. Decorative: always paired with a visible text label. */
+interface Props {
+  name: 'paste' | 'copy' | 'select' | 'clear' | 'undo' | 'download' | 'swap' | 'pen' | 'lock' | 'shuffle' | 'check' | 'stop';
+}
+const { name } = Astro.props;
+const paths: Record<Props['name'], string> = {
+  paste: '<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4.5V3h6v1.5"/><path d="M9.5 11h5M9.5 15h5"/>',
+  copy: '<rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h2"/>',
+  select: '<path d="M4 7V5a1 1 0 0 1 1-1h2M17 4h2a1 1 0 0 1 1 1v2M20 17v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2"/><path d="M8 10h8M8 14h5"/>',
+  clear: '<path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13"/>',
+  undo: '<path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/>',
+  download: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
+  swap: '<path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/>',
+  pen: '<path d="M4 20l4-1 11-11-3-3L5 16l-1 4z"/><path d="M14 6l3 3"/><path d="M19 15l1 2 2 1-2 1-1 2-1-2-2-1 2-1z"/>',
+  lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+  shuffle: '<path d="M3 7h3c5 0 7 10 12 10h3M18 14l3 3-3 3M3 17h3c1.6 0 2.9-1 4-2.4M14 9.4C15.1 8 16.4 7 18 7h3M18 4l3 3-3 3"/>',
+  check: '<path d="M5 12.5 10 17l9-10"/>',
+  stop: '<rect x="6" y="6" width="12" height="12" rx="2"/>',
+};
+---
+
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" set:html={paths[name]} />

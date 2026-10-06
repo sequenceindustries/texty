@@ -1,0 +1,122 @@
+---
+import Logo from './Logo.astro';
+import { GROUPS, byGroup } from '../data/tools';
+const current = Astro.url.pathname.replace(/\/$/, '');
+---
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="/" aria-label="Texty home"><Logo /></a>
+    <details class="menu">
+      <summary class="btn btn--small">All tools</summary>
+      <nav aria-label="All tools">
+        {
+          GROUPS.map((g) => (
+            <div class="group">
+              <p class="group-name">{g.name}</p>
+              <ul>
+                {byGroup(g.id).map((t) => (
+                  <li>
+                    <a href={`/${t.slug}`} aria-current={current === `/${t.slug}` ? 'page' : undefined}>{t.name}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </nav>
+    </details>
+  </div>
+</header>
+
+<script>
+  // Close the menu on Escape or an outside click.
+  const menu = document.querySelector<HTMLDetailsElement>('.site-header .menu');
+  if (menu) {
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menu.open) {
+        menu.open = false;
+        menu.querySelector('summary')?.focus();
+      }
+    });
+    document.addEventListener('click', (e) => {
+      if (menu.open && !menu.contains(e.target as Node)) menu.open = false;
+    });
+  }
+</script>
+
+<style>
+  .site-header {
+    position: relative;
+    z-index: 5;
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 68px;
+  }
+  .brand {
+    display: inline-flex;
+    padding: var(--s-2) 0;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .menu {
+    position: relative;
+  }
+  .menu summary {
+    list-style: none;
+  }
+  .menu summary::-webkit-details-marker {
+    display: none;
+  }
+  .menu nav {
+    position: absolute;
+    right: 0;
+    top: calc(100% + var(--s-2));
+    width: min(420px, calc(100vw - 2 * var(--gutter)));
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    padding: var(--s-3);
+    display: grid;
+    gap: var(--s-2);
+    background: var(--surface);
+    border-radius: var(--r-paper);
+    box-shadow: var(--shadow-paper), inset 0 0 0 1px var(--line);
+  }
+  .group-name {
+    padding: var(--s-1) var(--s-2);
+    font-size: var(--step--1);
+    font-weight: 700;
+    color: var(--ink-faint);
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  a {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 var(--s-2);
+    border-radius: var(--r-ctl);
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: var(--step--1);
+  }
+  a:hover,
+  a[aria-current='page'] {
+    background: var(--act-wash);
+    color: var(--act-deep);
+  }
+  @media (max-width: 420px) {
+    ul {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

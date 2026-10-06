@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Privacy — Texty" description="How Texty handles your text: most tools run in your browser, and nothing you type is stored." path="/privacy">
+  <article class="wrap prose">
+    <h1>Privacy</h1>
+    <p class="updated">Last updated October 2026.</p>
+
+    <h2>Your text</h2>
+    <p>Every tool except the AI Text Rewriter runs entirely in your browser. The text you paste or type is processed on your device and is never sent to our servers. Closing the page discards it.</p>
+    <p>When you use the AI Text Rewriter, the text you submit and your optional instruction are sent to our server and passed to our AI provider, Anthropic, to produce the rewrite. We do not store the text or the result, and we do not log it. By default, Anthropic does not use data sent through its API to train its models; it may keep request data for a limited time for safety and abuse monitoring under its own policies.</p>
+
+    <h2>What we do record</h2>
+    <p>We count anonymous usage events, such as which tool was opened, that a result was copied, or that an AI rewrite succeeded or failed, together with coarse details like the approximate length of the text (for example “1k–10k characters”). These events never include your text. We use them to see which tools are useful and to keep costs under control.</p>
+    <p>To limit abuse of the AI rewriter, our server keeps a daily count of rewrites per visitor in memory, keyed by network address. It is not written to logs and resets every day.</p>
+
+    <h2>Cookies</h2>
+    <p>Texty itself does not set cookies. If we show advertising, the ad provider may use cookies according to its own policy, and we will ask for consent where the law requires it.</p>
+
+    <h2>Contact</h2>
+    <p>Texty is operated by Sequence Industries. If you have a question about privacy, please get in touch with us.</p>
+  </article>
+</Base>
+
+<style>
+  .prose {
+    display: grid;
+    gap: var(--s-4);
+    max-width: calc(var(--measure) + 2 * var(--gutter));
+    padding-top: var(--s-6);
+  }
+  .prose h2 {
+    margin-top: var(--s-4);
+    font-size: var(--step-2);
+  }
+  .prose p {
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+  .updated {
+    font-size: var(--step--1);
+  }
+</style>

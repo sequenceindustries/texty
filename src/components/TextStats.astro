@@ -1,0 +1,69 @@
+---
+/**
+ * The tally under an editor: big tabular figures with small labels.
+ * Values are filled by the tool script via [data-stat="key"].
+ */
+interface Props {
+  items: { key: string; label: string; initial?: string }[];
+  label: string;
+  primary?: number;
+}
+const { items, label, primary = 0 } = Astro.props;
+---
+
+<dl class="tally" aria-label={label}>
+  {
+    items.map((it, i) => (
+      <div class:list={['cell', i < primary && 'cell--lead']}>
+        <dt>{it.label}</dt>
+        <dd class="num" data-stat={it.key}>{it.initial ?? '0'}</dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .tally {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    margin: 0;
+    border-radius: var(--r-paper);
+    overflow: hidden;
+    background: var(--line);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+  .cell {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 2px;
+    padding: var(--s-3) var(--s-4);
+    background: var(--surface-2);
+  }
+  dt {
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+  dd {
+    margin: 0;
+    font-size: var(--step-2);
+    font-weight: 750;
+    font-variation-settings: 'CASL' 0.5;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+  }
+  .cell--lead {
+    background: var(--surface);
+  }
+  .cell--lead dd {
+    font-size: var(--step-3);
+    color: var(--act);
+  }
+  @media (max-width: 720px) {
+    .tally {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

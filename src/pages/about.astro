@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="About Texty" description="Texty is a set of fast, free text tools that work in your browser, built by Sequence Industries." path="/about">
+  <article class="wrap prose">
+    <h1>About Texty</h1>
+    <p>Texty solves small text problems quickly. Count words, fix messy spacing, change case, sort a list, compare two versions or rewrite a paragraph, then copy the result and get on with your day.</p>
+    <p>There is nothing to install and no account to create. Most tools run entirely in your browser, which is why they are instant and why your text stays private.</p>
+    <p>Texty is free and supported by advertising, kept away from the tools themselves. It is built by Sequence Industries.</p>
+    <p>Spotted a bug or want a tool we don’t have yet? We’d like to hear about it.</p>
+  </article>
+</Base>
+
+<style>
+  .prose {
+    display: grid;
+    gap: var(--s-4);
+    max-width: calc(var(--measure) + 2 * var(--gutter));
+    padding-top: var(--s-6);
+  }
+  .prose p {
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+</style>

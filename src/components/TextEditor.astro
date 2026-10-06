@@ -1,0 +1,161 @@
+---
+import Icon from './Icon.astro';
+import ClearButton from './ClearButton.astro';
+import { MAX_TEXT } from '../scripts/ui';
+
+/**
+ * The text surface: ruled paper with a margin line. The visual centre of every tool.
+ * Behaviour lives in src/scripts/editor.ts (mounted by id).
+ */
+interface Props {
+  id: string;
+  label: string;
+  placeholder?: string;
+  rows?: number;
+  /** Soft character limit shown in the counter (e.g. AI input). */
+  max?: number;
+  toolbar?: boolean;
+  stats?: boolean;
+  /** Visually hide the label (it is still read by screen readers). */
+  hideLabel?: boolean;
+  spellcheck?: boolean;
+  mono?: boolean;
+  hint?: string;
+}
+const { id, label, placeholder = 'Paste or type your text…', rows = 10, max, toolbar = true, stats = true, hideLabel = false, spellcheck = true, mono = false, hint } = Astro.props;
+const hintId = hint ? `${id}-hint` : undefined;
+---
+
+<div class="editor" data-editor={id} data-max={max}>
+  <div class="bar">
+    <label for={id} class:list={['label', hideLabel && 'visually-hidden']}>{label}</label>
+    {
+      toolbar && (
+        <div class="tools" role="group" aria-label={`${label} actions`}>
+          <button type="button" class="btn btn--quiet btn--small" data-act="paste"><Icon name="paste" /><span>Paste</span></button>
+          <button type="button" class="btn btn--quiet btn--small" data-act="copy" disabled><Icon name="copy" /><span data-label>Copy</span></button>
+          <button type="button" class="btn btn--quiet btn--small hide-sm" data-act="select" disabled><Icon name="select" /><span>Select all</span></button>
+          <ClearButton />
+        </div>
+      )
+    }
+  </div>
+  <p class="paste-tip" data-paste-tip hidden>Press Ctrl+V (⌘V on Mac) to paste.</p>
+  <div class="paper">
+    <textarea
+      id={id}
+      name={id}
+      rows={rows}
+      placeholder={placeholder}
+      spellcheck={spellcheck ? 'true' : 'false'}
+      autocomplete="off"
+      autocapitalize="off"
+      maxlength={MAX_TEXT}
+      aria-describedby={hintId}
+      class:list={[mono && 'mono']}></textarea>
+    {stats && <p class="mini num" data-mini aria-live="off">0 words, 0 characters</p>}
+  </div>
+  {hint && <p class="hint" id={hintId}>{hint}</p>}
+  <p class="notice size-notice" data-size-notice role="status" hidden></p>
+</div>
+
+<style>
+  .editor {
+    display: grid;
+    gap: var(--s-2);
+    min-width: 0;
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-2);
+    flex-wrap: wrap;
+    min-height: 40px;
+  }
+  .label {
+    font-weight: 700;
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+  .tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    margin-left: auto;
+  }
+  .paper {
+    --pad-l: 3.25rem;
+    --pad-t: 1.1rem;
+    position: relative;
+    border-radius: var(--r-paper);
+    background: var(--surface);
+    box-shadow: var(--shadow-paper), inset 0 0 0 1px var(--line);
+  }
+  .paper:focus-within {
+    box-shadow: var(--shadow-paper), inset 0 0 0 2px var(--act);
+  }
+  textarea {
+    display: block;
+    width: 100%;
+    min-height: calc(var(--editor-lh) * 6 + var(--pad-t) * 2);
+    margin: 0;
+    padding: var(--pad-t) var(--s-5) calc(var(--pad-t) + 1.5rem) var(--pad-l);
+    border: 0;
+    border-radius: var(--r-paper);
+    resize: vertical;
+    color: var(--ink);
+    font: 450 1.0625rem / var(--editor-lh) var(--font);
+    /* Ruled lines aligned to the text, plus the red margin line. */
+    background-color: transparent;
+    background-image:
+      linear-gradient(to right, transparent calc(var(--pad-l) - 0.75rem), var(--margin) calc(var(--pad-l) - 0.75rem), var(--margin) calc(var(--pad-l) - 0.75rem + 2px), transparent calc(var(--pad-l) - 0.75rem + 2px)),
+      repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--editor-lh) - 1px), var(--rule) calc(var(--editor-lh) - 1px), var(--rule) var(--editor-lh));
+    background-position: 0 0, 0 var(--pad-t);
+    background-attachment: local;
+    overflow-wrap: anywhere;
+  }
+  textarea.mono {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+  }
+  textarea::placeholder {
+    color: var(--ink-faint);
+    opacity: 1;
+  }
+  textarea:focus-visible {
+    outline: none;
+  }
+  .mini {
+    position: absolute;
+    right: var(--s-4);
+    bottom: var(--s-2);
+    margin: 0;
+    padding: 0 var(--s-2);
+    border-radius: var(--r-pill);
+    background: var(--surface);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ink-faint);
+    pointer-events: none;
+  }
+  .mini:global(.is-over) {
+    color: var(--del);
+  }
+  .hint,
+  .paste-tip {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+  @media (max-width: 560px) {
+    .paper {
+      --pad-l: 2rem;
+    }
+    textarea {
+      padding-right: var(--s-3);
+    }
+    .hide-sm {
+      display: none;
+    }
+  }
+</style>

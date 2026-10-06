@@ -1,0 +1,73 @@
+---
+import TextEditor from '../TextEditor.astro';
+import ResultPanel from '../ResultPanel.astro';
+import Icon from '../Icon.astro';
+const toggles = [
+  { key: 'collapseSpaces', label: 'Remove extra spaces between words', on: true },
+  { key: 'trimLines', label: 'Trim spaces at the start and end of each line', on: true },
+  { key: 'trimText', label: 'Trim whitespace at the start and end of the text', on: true },
+  { key: 'normalizeLineBreaks', label: 'Normalise line breaks', on: true },
+  { key: 'removeInvisible', label: 'Remove hidden characters and odd spaces', on: true },
+  { key: 'straightenQuotes', label: 'Straighten curly quotes', on: false },
+];
+---
+
+<TextEditor id="clean-text" label="Messy text" rows={9} />
+<fieldset class="opts" data-clean-opts>
+  <legend class="legend">What to fix</legend>
+  <div class="toggles">
+    {
+      toggles.map((t) => (
+        <label class="check">
+          <input type="checkbox" name={t.key} checked={t.on} />
+          {t.label}
+        </label>
+      ))
+    }
+  </div>
+  <label class="field blank">
+    <span>Blank lines</span>
+    <select class="select" name="blankLines">
+      <option value="collapse" selected>Keep one blank line between paragraphs</option>
+      <option value="remove">Remove all blank lines</option>
+      <option value="keep">Leave blank lines as they are</option>
+    </select>
+  </label>
+</fieldset>
+<ResultPanel id="clean-result" label="Preview" filename="texty-cleaned.txt" rows={9}>
+  <Fragment slot="actions">
+    <button type="button" class="btn" data-act="apply" disabled><Icon name="check" /><span data-label>Clean text</span></button>
+  </Fragment>
+</ResultPanel>
+
+<script>
+  import '../../scripts/tools/text-cleaner';
+</script>
+
+<style>
+  .opts {
+    display: grid;
+    gap: var(--s-3);
+    margin: 0;
+    padding: var(--s-4) var(--s-5);
+    border: 0;
+    border-radius: var(--r-paper);
+    background: var(--surface);
+    box-shadow: inset 0 0 0 1px var(--line);
+    min-width: 0;
+  }
+  .opts legend {
+    float: left;
+    width: 100%;
+    margin-bottom: var(--s-1);
+    padding: 0;
+  }
+  .toggles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+    column-gap: var(--s-5);
+  }
+  .blank {
+    max-width: 26rem;
+  }
+</style>

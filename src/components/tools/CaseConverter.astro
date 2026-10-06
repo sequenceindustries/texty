@@ -1,0 +1,23 @@
+---
+import TextEditor from '../TextEditor.astro';
+import ResultPanel from '../ResultPanel.astro';
+import { CASES } from '../../../shared/text/case';
+---
+
+<TextEditor id="case-text" label="Your text" rows={8} />
+<fieldset class="seg" data-case-pick>
+  <legend class="legend">Convert to</legend>
+  {
+    CASES.map((c) => (
+      <label>
+        <input type="radio" name="case" value={c.id} checked={c.id === 'title'} />
+        <span>{c.label}</span>
+      </label>
+    ))
+  }
+</fieldset>
+<ResultPanel id="case-result" label="Converted text" filename="texty-case.txt" rows={8} />
+
+<script>
+  import '../../scripts/tools/case-converter';
+</script>

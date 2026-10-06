@@ -1,0 +1,43 @@
+---
+import TextEditor from '../TextEditor.astro';
+import ResultPanel from '../ResultPanel.astro';
+---
+
+<TextEditor id="slug-text" label="Title or text" placeholder="How To Start A Small Business In 2026!" rows={3} toolbar={false} stats={false} hint="One slug per line: paste several titles to make several slugs." />
+<div class="opts" data-slug-opts>
+  <fieldset class="seg">
+    <legend class="legend">Separator</legend>
+    <label><input type="radio" name="sep" value="-" checked /><span>Hyphen -</span></label>
+    <label><input type="radio" name="sep" value="_" /><span>Underscore _</span></label>
+  </fieldset>
+  <div class="checks">
+    <label class="check"><input type="checkbox" name="lowercase" checked /> Lowercase</label>
+    <label class="check"><input type="checkbox" name="ascii" /> Plain A–Z only</label>
+  </div>
+  <label class="field max">
+    <span>Maximum length</span>
+    <input class="input" type="number" name="max" min="0" max="500" step="1" inputmode="numeric" placeholder="No limit" />
+  </label>
+</div>
+<ResultPanel id="slug-result" label="Slug" filename="texty-slugs.txt" rows={3} copyLabel="Copy slug" mono download={false} />
+
+<script>
+  import '../../scripts/tools/slug';
+</script>
+
+<style>
+  .opts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--s-4) var(--s-6);
+  }
+  .checks {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: var(--s-5);
+  }
+  .max {
+    width: 11rem;
+  }
+</style>

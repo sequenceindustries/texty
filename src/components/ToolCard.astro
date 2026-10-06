@@ -1,0 +1,86 @@
+---
+import Icon from './Icon.astro';
+import type { Tool } from '../data/tools';
+/** A link to a tool. "tile" for the featured groups, "row" for list-style groups. */
+interface Props {
+  tool: Tool;
+  variant?: 'tile' | 'row';
+  current?: boolean;
+}
+const { tool, variant = 'tile', current = false } = Astro.props;
+---
+
+<a href={`/${tool.slug}`} class:list={['card', `card--${variant}`, tool.group === 'ai' && 'card--ai']} aria-current={current ? 'page' : undefined}>
+  <span class="name">
+    {tool.group === 'ai' && <Icon name="pen" />}
+    {tool.name}
+  </span>
+  <span class="blurb">{tool.blurb}</span>
+</a>
+
+<style>
+  .card {
+    display: grid;
+    gap: 2px;
+    color: var(--ink);
+    text-decoration: none;
+    min-width: 0;
+  }
+  .name {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-weight: 750;
+    font-variation-settings: 'CASL' 1;
+  }
+  .name :global(svg) {
+    width: 20px;
+    height: 20px;
+    color: var(--act);
+  }
+  .blurb {
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+  }
+  .card--tile {
+    align-content: start;
+    padding: var(--s-4) var(--s-5);
+    border-radius: var(--r-paper);
+    background: var(--surface);
+    box-shadow: inset 0 0 0 1px var(--line);
+    border-left: 3px solid var(--margin);
+  }
+  .card--tile .name {
+    font-size: var(--step-1);
+  }
+  .card--tile:hover {
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+  }
+  .card--tile:hover .name {
+    color: var(--act);
+  }
+  .card--row {
+    grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
+    align-items: baseline;
+    gap: var(--s-4);
+    padding: var(--s-3) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .card--row:hover .name {
+    color: var(--act);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .card--ai {
+    border-left-color: var(--act);
+  }
+  .card[aria-current='page'] .name {
+    color: var(--act);
+  }
+  @media (max-width: 560px) {
+    .card--row {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+  }
+</style>

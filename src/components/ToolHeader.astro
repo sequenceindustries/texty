@@ -1,0 +1,51 @@
+---
+import Icon from './Icon.astro';
+import type { Tool } from '../data/tools';
+/** H1, one-line explanation and where the text goes. */
+interface Props {
+  tool: Tool;
+}
+const { tool } = Astro.props;
+---
+
+<header class="tool-header">
+  <h1>{tool.h1}</h1>
+  <p class="intro">{tool.intro}</p>
+  {
+    tool.local ? (
+      <p class="where"><Icon name="lock" /><span>Runs in your browser. Your text is never uploaded.</span></p>
+    ) : (
+      <p class="where where--ai"><Icon name="pen" /><span>Your text is sent to our AI provider to rewrite it. We don’t store it.</span></p>
+    )
+  }
+</header>
+
+<style>
+  .tool-header {
+    display: grid;
+    gap: var(--s-2);
+    padding-block: var(--s-5) var(--s-5);
+    max-width: 48rem;
+  }
+  .intro {
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+    max-width: 56ch;
+  }
+  .where {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--add);
+  }
+  .where--ai {
+    color: var(--act);
+  }
+  .where :global(svg) {
+    width: 16px;
+    height: 16px;
+    flex: none;
+  }
+</style>

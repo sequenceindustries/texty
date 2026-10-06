@@ -1,0 +1,40 @@
+---
+import ToolPage from '../components/ToolPage.astro';
+import { tools, type ToolId } from '../data/tools';
+import WordCounter from '../components/tools/WordCounter.astro';
+import CharacterCounter from '../components/tools/CharacterCounter.astro';
+import CaseConverter from '../components/tools/CaseConverter.astro';
+import TextCleaner from '../components/tools/TextCleaner.astro';
+import RemoveDuplicates from '../components/tools/RemoveDuplicates.astro';
+import SortLines from '../components/tools/SortLines.astro';
+import FindReplace from '../components/tools/FindReplace.astro';
+import TextDiff from '../components/tools/TextDiff.astro';
+import SlugGenerator from '../components/tools/SlugGenerator.astro';
+import LoremIpsum from '../components/tools/LoremIpsum.astro';
+import TextRepeater from '../components/tools/TextRepeater.astro';
+import AiRewriter from '../components/tools/AiRewriter.astro';
+
+export function getStaticPaths() {
+  return tools.map((t) => ({ params: { tool: t.slug }, props: { tool: t } }));
+}
+
+const COMPONENTS: Record<ToolId, any> = {
+  'word-counter': WordCounter,
+  'character-counter': CharacterCounter,
+  'case-converter': CaseConverter,
+  'text-cleaner': TextCleaner,
+  'remove-duplicate-lines': RemoveDuplicates,
+  'sort-lines': SortLines,
+  'find-and-replace': FindReplace,
+  'text-diff': TextDiff,
+  'url-slug-generator': SlugGenerator,
+  'lorem-ipsum-generator': LoremIpsum,
+  'text-repeater': TextRepeater,
+  'ai-text-rewriter': AiRewriter,
+};
+
+const { tool } = Astro.props;
+const Tool = COMPONENTS[tool.slug];
+---
+
+<ToolPage tool={tool}><Tool /></ToolPage>

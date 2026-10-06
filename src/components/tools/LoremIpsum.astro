@@ -1,0 +1,53 @@
+---
+import ResultPanel from '../ResultPanel.astro';
+---
+
+<div class="opts" data-lorem-opts>
+  <fieldset class="seg">
+    <legend class="legend">Generate</legend>
+    <label><input type="radio" name="unit" value="paragraphs" checked /><span>Paragraphs</span></label>
+    <label><input type="radio" name="unit" value="sentences" /><span>Sentences</span></label>
+    <label><input type="radio" name="unit" value="words" /><span>Words</span></label>
+  </fieldset>
+  <label class="field count">
+    <span>How many</span>
+    <input class="input" type="number" name="count" value="3" min="1" max="200" step="1" inputmode="numeric" />
+  </label>
+  <div class="checks">
+    <label class="check"><input type="checkbox" name="lorem" checked /> Start with “Lorem ipsum…”</label>
+    <label class="check"><input type="checkbox" name="html" /> HTML &lt;p&gt; tags</label>
+  </div>
+  <button type="button" class="btn btn--primary" data-act="generate">Generate</button>
+</div>
+<p class="limit" data-lorem-limit role="status"></p>
+<ResultPanel id="lorem-result" label="Placeholder text" filename="lorem-ipsum.txt" rows={12} />
+
+<script>
+  import '../../scripts/tools/lorem';
+</script>
+
+<style>
+  .opts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--s-4) var(--s-5);
+    padding: var(--s-4) var(--s-5);
+    border-radius: var(--r-paper);
+    background: var(--surface);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+  .count {
+    width: 8rem;
+  }
+  .checks {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: var(--s-5);
+  }
+  .limit {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+    min-height: 1em;
+  }
+</style>

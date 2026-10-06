@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import ToolGrid from '../components/ToolGrid.astro';
+import { byGroup } from '../data/tools';
+---
+
+<Base title="Page not found — Texty" description="This page doesn't exist." path="/404" noindex>
+  <section class="wrap nf">
+    <h1>This page doesn’t exist.</h1>
+    <p>The link may be old or mistyped. These are the tools people use most:</p>
+    <ToolGrid tools={byGroup('popular')} />
+    <p><a href="/">See all tools</a></p>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    display: grid;
+    gap: var(--s-4);
+    padding-top: var(--s-7);
+  }
+  .nf > p {
+    color: var(--ink-soft);
+  }
+</style>

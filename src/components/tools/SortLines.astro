@@ -1,0 +1,51 @@
+---
+import TextEditor from '../TextEditor.astro';
+import ResultPanel from '../ResultPanel.astro';
+import Icon from '../Icon.astro';
+import { SORTS } from '../../../shared/text/lines';
+---
+
+<TextEditor id="sort-text" label="Your lines" placeholder="Paste lines to sort, one per line…" rows={10} spellcheck={false} />
+<fieldset class="seg" data-sort-mode>
+  <legend class="legend">Sort</legend>
+  {
+    SORTS.map((s, i) => (
+      <label>
+        <input type="radio" name="mode" value={s.id} checked={i === 0} />
+        <span>{s.label}</span>
+      </label>
+    ))
+  }
+</fieldset>
+<div class="row" data-sort-opts>
+  <label class="check"><input type="checkbox" name="caseSensitive" /> Capitals first (case-sensitive)</label>
+  <label class="field blank">
+    <span>Blank lines</span>
+    <select class="select" name="blankLines">
+      <option value="remove" selected>Remove them</option>
+      <option value="end">Move them to the end</option>
+      <option value="keep">Sort them with the rest</option>
+    </select>
+  </label>
+</div>
+<ResultPanel id="sort-result" label="Sorted lines" filename="texty-sorted.txt" rows={10}>
+  <Fragment slot="actions">
+    <button type="button" class="btn" data-act="reshuffle" hidden><Icon name="shuffle" /><span>Shuffle again</span></button>
+  </Fragment>
+</ResultPanel>
+
+<script>
+  import '../../scripts/tools/sort-lines';
+</script>
+
+<style>
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--s-3) var(--s-6);
+  }
+  .blank {
+    min-width: 15rem;
+  }
+</style>

@@ -1,0 +1,28 @@
+---
+import TextEditor from './TextEditor.astro';
+/** Two editors side by side; stacked on narrow screens. */
+interface Props {
+  a: { id: string; label: string; placeholder?: string };
+  b: { id: string; label: string; placeholder?: string };
+  rows?: number;
+}
+const { a, b, rows = 12 } = Astro.props;
+---
+
+<div class="dual">
+  <TextEditor id={a.id} label={a.label} placeholder={a.placeholder} rows={rows} spellcheck={false} />
+  <TextEditor id={b.id} label={b.label} placeholder={b.placeholder} rows={rows} spellcheck={false} />
+</div>
+
+<style>
+  .dual {
+    display: grid;
+    gap: var(--s-5);
+    grid-template-columns: minmax(0, 1fr);
+  }
+  @media (min-width: 860px) {
+    .dual {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+</style>

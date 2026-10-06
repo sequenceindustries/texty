@@ -1,0 +1,40 @@
+---
+import TextEditor from '../TextEditor.astro';
+import ResultPanel from '../ResultPanel.astro';
+---
+
+<TextEditor id="dedupe-text" label="Your list" placeholder={'Paste a list, one item per line…\nApple\nOrange\nApple'} rows={10} spellcheck={false} />
+<fieldset class="opts" data-dedupe-opts>
+  <legend class="visually-hidden">Options</legend>
+  <div class="seg" role="radiogroup" aria-label="Which copy to keep">
+    <label><input type="radio" name="keep" value="first" checked /><span>Keep first copy</span></label>
+    <label><input type="radio" name="keep" value="last" /><span>Keep last copy</span></label>
+  </div>
+  <div class="checks">
+    <label class="check"><input type="checkbox" name="ignoreCase" /> Ignore capital letters (Apple = apple)</label>
+    <label class="check"><input type="checkbox" name="ignoreWhitespace" checked /> Ignore surrounding spaces</label>
+    <label class="check"><input type="checkbox" name="preserveOrder" checked /> Keep original order</label>
+    <label class="check"><input type="checkbox" name="removeBlank" /> Remove blank lines</label>
+  </div>
+</fieldset>
+<ResultPanel id="dedupe-result" label="Unique lines" filename="texty-unique-lines.txt" rows={10} />
+
+<script>
+  import '../../scripts/tools/remove-duplicates';
+</script>
+
+<style>
+  .opts {
+    display: grid;
+    gap: var(--s-3);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+  .checks {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: var(--s-5);
+  }
+</style>

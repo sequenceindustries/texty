@@ -1,0 +1,16 @@
+---
+import Icon from './Icon.astro';
+/** Copy button. Behaviour is attached by the editor / result scripts through data-act. */
+interface Props {
+  act?: string;
+  label?: string;
+  primary?: boolean;
+  small?: boolean;
+  option?: string;
+}
+const { act = 'copy-result', label = 'Copy result', primary = false, small = false, option } = Astro.props;
+---
+
+<button type="button" class:list={['btn', primary ? 'btn--primary' : '', small ? 'btn--small' : '']} data-act={act} data-option={option} disabled>
+  <Icon name="copy" /><span data-label>{label}</span>
+</button>

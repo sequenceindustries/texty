@@ -1,0 +1,117 @@
+---
+import Base from '../layouts/Base.astro';
+import WordCounter from '../components/tools/WordCounter.astro';
+import ToolGrid from '../components/ToolGrid.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { GROUPS, byGroup, tools } from '../data/tools';
+
+const site = Astro.site!.toString().replace(/\/$/, '');
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Texty',
+    url: `${site}/`,
+    description: 'Free text tools: count, clean, transform, compare and rewrite text in seconds.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: tools.map((t, i) => ({ '@type': 'ListItem', position: i + 1, name: t.name, url: `${site}/${t.slug}` })),
+  },
+];
+---
+
+<Base
+  title="Texty — Free Text Tools: Word Counter, Case Converter & More"
+  description="Count, clean, transform, compare and rewrite text in seconds. Word counter, case converter, text cleaner, diff and more. Free, private, no sign-up."
+  path="/"
+  jsonLd={jsonLd}
+  tool="home"
+>
+  <section class="wrap hero" aria-labelledby="hero-h">
+    <div class="hero-copy">
+      <h1 id="hero-h">Text tools that just work.</h1>
+      <p>Count, clean, transform, compare and rewrite text in seconds. Start typing below — the counts update as you go.</p>
+    </div>
+    <WordCounter />
+    <p class="more-link"><a href="/word-counter">Open the full word counter</a>, or pick another tool below.</p>
+  </section>
+
+  <AdSlot name="home-mid" />
+
+  <div class="wrap groups">
+    {
+      GROUPS.map((g) => (
+        <section class:list={['group', `group--${g.id}`]} id={g.id} aria-labelledby={`${g.id}-h`}>
+          <div class="group-head">
+            <h2 id={`${g.id}-h`}>{g.name}</h2>
+            <p>{g.intro}</p>
+          </div>
+          <ToolGrid tools={byGroup(g.id)} variant={g.id === 'utility' ? 'row' : 'tile'} />
+        </section>
+      ))
+    }
+  </div>
+
+  <section class="wrap promise" aria-labelledby="promise-h">
+    <h2 id="promise-h">Your text stays with you</h2>
+    <p>
+      Every tool except the AI rewriter runs entirely in your browser. Your text is never uploaded, never stored and never used for anything else.
+      When you use the AI rewriter, your text goes to our AI provider for that one request, and we say so on the page.
+    </p>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    display: grid;
+    gap: var(--s-5);
+    padding-top: var(--s-6);
+  }
+  .hero-copy {
+    display: grid;
+    gap: var(--s-3);
+    max-width: 44rem;
+  }
+  .hero-copy p {
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+    max-width: 52ch;
+  }
+  .more-link {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+  .groups {
+    display: grid;
+    gap: var(--s-8);
+    margin-top: var(--s-8);
+  }
+  .group {
+    display: grid;
+    gap: var(--s-4);
+  }
+  .group-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--s-1) var(--s-4);
+  }
+  .group-head p {
+    color: var(--ink-soft);
+  }
+  .group--popular :global(.grid--tile) {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  }
+  .promise {
+    display: grid;
+    gap: var(--s-3);
+    margin-top: var(--s-8);
+  }
+  .promise p {
+    max-width: var(--measure);
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+</style>

@@ -1,0 +1,38 @@
+---
+import ToolCard from './ToolCard.astro';
+import type { Tool } from '../data/tools';
+interface Props {
+  tools: Tool[];
+  variant?: 'tile' | 'row';
+}
+const { tools, variant = 'tile' } = Astro.props;
+---
+
+<ul class:list={['grid', `grid--${variant}`]}>
+  {
+    tools.map((t) => (
+      <li>
+        <ToolCard tool={t} variant={variant} />
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+  }
+  .grid--tile {
+    gap: var(--s-3);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  }
+  .grid--tile li {
+    display: grid;
+  }
+  .grid--row {
+    border-top: 1px solid var(--rule);
+  }
+</style>

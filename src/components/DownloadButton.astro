@@ -1,0 +1,12 @@
+---
+import Icon from './Icon.astro';
+interface Props {
+  label?: string;
+  small?: boolean;
+}
+const { label = 'Download .txt', small = false } = Astro.props;
+---
+
+<button type="button" class:list={['btn', small ? 'btn--small' : '']} data-act="download-result" disabled>
+  <Icon name="download" /><span data-label>{label}</span>
+</button>

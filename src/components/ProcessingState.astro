@@ -1,0 +1,49 @@
+---
+import Icon from './Icon.astro';
+/** Honest progress: a spinner, what is happening, real elapsed seconds, and a way to stop. No fake percentages. */
+interface Props {
+  id: string;
+  label: string;
+}
+const { id, label } = Astro.props;
+---
+
+<div class="processing" data-processing={id} role="status" hidden>
+  <span class="spin" aria-hidden="true"></span>
+  <span><span data-processing-label>{label}</span> <span class="elapsed num" data-elapsed></span></span>
+  <button type="button" class="btn btn--quiet btn--small" data-act="cancel"><Icon name="stop" /><span>Stop</span></button>
+</div>
+
+<style>
+  .processing {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    min-height: 44px;
+    font-weight: 600;
+  }
+  .elapsed {
+    color: var(--ink-faint);
+    font-weight: 500;
+  }
+  .spin {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2.5px solid var(--act-wash);
+    border-top-color: var(--act);
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .spin {
+      animation: none;
+      border-color: var(--act);
+      border-right-color: var(--act-wash);
+    }
+  }
+</style>

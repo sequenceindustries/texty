@@ -1,0 +1,104 @@
+---
+import Base from '../layouts/Base.astro';
+import ToolHeader from './ToolHeader.astro';
+import FAQSection from './FAQSection.astro';
+import RelatedTools from './RelatedTools.astro';
+import AdSlot from './AdSlot.astro';
+import type { Tool } from '../data/tools';
+
+/** Every tool page: title, explanation, the tool (slot), how it works, FAQ, related tools. */
+interface Props {
+  tool: Tool;
+}
+const { tool } = Astro.props;
+const site = Astro.site!.toString().replace(/\/$/, '');
+const url = `${site}/${tool.slug}`;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: `${tool.name} — Texty`,
+    url,
+    description: tool.description,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    browserRequirements: 'Requires JavaScript',
+    isAccessibleForFree: true,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: tool.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Texty', item: `${site}/` },
+      { '@type': 'ListItem', position: 2, name: tool.name, item: url },
+    ],
+  },
+];
+---
+
+<Base title={tool.title} description={tool.description} path={`/${tool.slug}`} jsonLd={jsonLd} tool={tool.slug}>
+  <div class="wrap">
+    <ToolHeader tool={tool} />
+    <div class="tool">
+      <slot />
+    </div>
+  </div>
+
+  <AdSlot name="below-tool" />
+
+  <div class="wrap content">
+    <section class="how" aria-labelledby="how-h">
+      <h2 id="how-h">How it works</h2>
+      <ol>{tool.howTo.map((s) => <li>{s}</li>)}</ol>
+    </section>
+    <FAQSection faqs={tool.faqs} />
+    <RelatedTools slugs={tool.related} />
+  </div>
+</Base>
+
+<style>
+  .tool {
+    display: grid;
+    gap: var(--s-6);
+  }
+  .content {
+    display: grid;
+    gap: var(--s-8);
+    margin-top: var(--s-9);
+  }
+  .content > :global(section:not(.related)) {
+    max-width: var(--measure);
+  }
+  .how h2 {
+    margin-bottom: var(--s-4);
+  }
+  ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+    display: grid;
+    gap: var(--s-3);
+  }
+  li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 2.25rem 1fr;
+    align-items: baseline;
+    color: var(--ink-soft);
+    line-height: 1.65;
+  }
+  li::before {
+    content: counter(step) '.';
+    font-weight: 800;
+    font-variation-settings: 'CASL' 1;
+    color: var(--act);
+  }
+</style>
